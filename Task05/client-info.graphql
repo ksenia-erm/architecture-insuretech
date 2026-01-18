@@ -1,0 +1,68 @@
+schema {
+  query: Query
+}
+
+"""
+Корневой тип запросов.
+"""
+type Query {
+  """
+  Получить информацию о клиенте по его ID.
+  Эквивалент REST-операции GET /clients/{id}.
+  """
+  client(id: ID!): Client
+
+  """
+  Получить список документов клиента по его ID.
+  Эквивалент GET /clients/{id}/documents.
+  Оставлен для случаев, когда нужны только документы без остальной карточки.
+  """
+  clientDocuments(id: ID!): [Document!]!
+
+  """
+  Получить список родственников клиента по его ID.
+  Эквивалент GET /clients/{id}/relatives.
+  """
+  clientRelatives(id: ID!): [Relative!]!
+}
+
+"""
+Клиент. Базовые данные + связанные сущности.
+"""
+type Client {
+  id: ID!
+  name: String
+  age: Int
+
+  """
+  Документы клиента. Загружаются по необходимости
+  (эквивалент /clients/{id}/documents).
+  """
+  documents: [Document!]!
+
+  """
+  Родственники клиента. Эквивалент /clients/{id}/relatives.
+  """
+  relatives: [Relative!]!
+}
+
+"""
+Документ клиента.
+"""
+type Document {
+  id: ID!
+  type: String
+  number: String
+  issueDate: String
+  expiryDate: String
+}
+
+"""
+Родственник клиента.
+"""
+type Relative {
+  id: ID!
+  relationType: String
+  name: String
+  age: Int
+}
